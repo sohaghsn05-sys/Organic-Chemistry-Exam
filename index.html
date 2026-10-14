@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organic Chemistry — Interactive Exam</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#182033;--muted:#667085;--purple:#6d28d9;--purple2:#ede9fe;--green:#15803d;--red:#b91c1c;--line:#e4e7ec}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali","Nirmala UI",sans-serif;line-height:1.55}
+header{background:linear-gradient(120deg,#24104f,#6d28d9);color:white;padding:20px 16px}header .wrap{max-width:1100px;margin:auto}h1{font-size:clamp(1.25rem,3vw,1.8rem);margin:0 0 4px}.sub{opacity:.9;font-size:.92rem}
+.wrap{max-width:1100px;margin:18px auto;padding:0 14px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 3px 12px #1720330a}
+.toprow{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.pill{background:var(--purple2);color:#4c1d95;padding:5px 10px;border-radius:999px;font-size:.85rem;font-weight:700}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.2rem;background:#fff1f2;color:#9f1239;border:1px solid #fecdd3;border-radius:10px;padding:7px 12px}
+.progress{height:7px;background:#eee;border-radius:99px;overflow:hidden;margin:12px 0 20px}.progress>div{height:100%;background:var(--purple);width:0;transition:width .2s}
+.qtext{font-size:1.17rem;font-weight:700;margin:8px 0 18px;white-space:pre-wrap}
+.option{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:11px;padding:12px;margin:9px 0;cursor:pointer;transition:.15s}
+.option:hover{border-color:#a78bfa;background:#faf8ff}.option input{margin-top:5px;accent-color:var(--purple);flex:0 0 auto}.option.chosen{border-color:var(--purple);background:#f5f3ff}
+.controls{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;margin-top:20px}.btn{border:0;border-radius:10px;padding:10px 15px;font-weight:700;cursor:pointer;font-size:.95rem}.btn:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#eef0f5;color:#344054}.primary{background:var(--purple);color:#fff}.danger{background:#b91c1c;color:#fff}.sidebar h2{font-size:1rem;margin:0 0 10px}.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.num{border:1px solid var(--line);background:white;border-radius:8px;min-height:38px;cursor:pointer;font-weight:700;color:#475467}.num.current{outline:2px solid var(--purple);border-color:var(--purple)}.num.answered{background:#dcfce7;border-color:#86efac;color:#166534}.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin:12px 0}.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}.stat{background:#f8fafc;border:1px solid var(--line);padding:12px;border-radius:12px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:1.3rem}.hidden{display:none!important}.review-item{border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}.review-item.correct{border-left:5px solid #16a34a}.review-item.wrong{border-left:5px solid #dc2626}.review-item.unanswered{border-left:5px solid #98a2b3}.review-item p{margin:7px 0}.tag{font-size:.8rem;font-weight:800}.ok{color:var(--green)}.bad{color:var(--red)}.muted{color:var(--muted);font-size:.88rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{order:-1}.numbers{grid-template-columns:repeat(8,1fr)}.card{padding:15px}.summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.numbers{grid-template-columns:repeat(5,1fr)}.qtext{font-size:1.05rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Organic Chemistry — Interactive Exam</h1><div class="sub">40 MCQ · 15 minutes · +1 correct · −0.25 wrong</div></div></header>
+<div class="wrap">
+<section id="exam">
+<div class="layout">
+<main class="card">
+<div class="toprow"><span class="pill" id="qcount">Question 1 of 40</span><span class="timer" id="timer" aria-live="polite">15:00</span></div>
+<div class="progress"><div id="progress"></div></div>
+<div class="muted" id="sourceRef">Original PDF reference: Q1</div>
+<div class="qtext" id="question"></div>
+<div id="options"></div>
+<div class="controls"><button class="btn secondary" id="prev">← Previous</button><button class="btn primary" id="next">Next →</button></div>
+</main>
+<aside class="card sidebar">
+<h2>Question Navigator</h2><div class="numbers" id="numbers"></div>
+<div class="legend"><span><i class="dot" style="background:#dcfce7;border:1px solid #86efac"></i>Answered</span><span><i class="dot" style="background:white;border:1px solid #cbd5e1"></i>Unanswered</span><span><i class="dot" style="background:#ede9fe;border:1px solid #a78bfa"></i>Current</span></div>
+<p class="muted" id="answeredCount">Answered: 0 / 40</p>
+<button class="btn danger" id="submit" style="width:100%;margin-top:8px">Submit Exam</button>
+<p class="muted">Submit করলে উত্তর lock হবে। সময় শেষ হলে স্বয়ংক্রিয়ভাবে submit হবে।</p>
+</aside>
+</div>
+</section>
+<section id="result" class="card hidden">
+<h1>Exam Result</h1><p class="muted" id="resultMessage"></p>
+<div class="summary" id="stats"></div>
+<div class="controls"><button class="btn primary" id="toggleReview">Answer Review দেখুন</button><button class="btn secondary" onclick="window.print()">Print Result</button></div>
+<div id="review" class="hidden"></div>
+</section>
+</div>
+<footer>Source: uploaded “Questions_Organic Chemistry.pdf”. Selected questions retain their original PDF question reference.</footer>
+<script>
+const questions = [
+{n:1,t:"বেনজিনের নাইট্রেশনে প্রভাবক কোনটি?",o:["A.গাঢ় H2SO4","B.অনার্দ্র ZnCl2","C.অনার্দ্র AlCl3","D.লঘু H2SO4"],a:0},
+{n:2,t:"পোড়াত্বকে অ্যান্টিসেপটিক রূপে ব্যবহৃত হয় কোনটি?",o:["১,৩ ডাইমিথাইল বেনজিন","2,4,6-ট্রাইনাইট্রো ফেনল","বেনজাল ক্লোরাইড","৪ - মিথাইল ফিনাইল"],a:1},
+{n:3,t:"কোন বিক্রিয়ায় দ্বিযোজী কার্বনিল মূলক সরাসরি মিথিলিন মূলকে পরিণত হয়?",o:["উর্টজ বিক্রিয়ায়","ডিকার্বক্সিলেশন","ক্লিমেনসেন বিজারণ","গ্রিগনার্ড বিকারক দ্বারা"],a:2},
+{n:4,t:"বেনজিনের বন্ধন সমূহ হলো -",o:["6 সিগমা + 12 পাই","6 সিগমা + 6 পাই","6 সিগমা + 3 পাই","12 সিগমা + 3 পাই"],a:3},
+{n:5,t:"ক্লিমেনসন বিজারণ বিক্রিয়ায় কোন বিজারক ব্যবহার করা হয়?",o:["A.Hg","B.Zn.Ag","C.NaOH","D.Cu"],a:1},
+{n:6,t:"নিচের কোনটি আলোক সমাণু প্রদর্শন করে?",o:["A.ইথানল","খ.ইথার","গ.পেন্টেন","ঘ.ল্যাকটিক এসিড"],a:3},
+{n:7,t:"লঘু তেলে নিরপেক্ষ জাতীয় উপাদান নিচের কোনটি?",o:["ক.জাইলিন","খ.অ্যানিলিন","গ.থায়োফিন","ঘ.ফেনল"],a:0},
+{n:8,t:"বেনজিনে C-C বন্ধন দৈর্ঘ্য কত?",o:["1.39nm","13.9A°","0.139nm","Both A & B"],a:2},
+{n:9,t:"অ্যালকাইনের বন্ধন কোন কত?",o:["120°","98°","180°","109.5°"],a:2},
+{n:10,t:"কোনটি বিষমচাক্রিক যৌগ?",o:["সাইক্লোহেক্সেন","চাক্রিক প্রোপেন","ফিউরান","ন্যাপথালিন"],a:2},
+{n:11,t:"কোন যৌগে পাই বন্ধন নেই?",o:["C2H6","C2H2","HCHO","HCN"],a:0},
+{n:12,t:"কোন যৌগে একের অধিক ধরনের সংকরিত কার্বন আছে?",o:["Cyclohexane","Toluene","Benzene","N-butane"],a:1},
+{n:14,t:"বেনজয়িক এসিডের গলনাংক কত?",o:["65°C","121°C","200°C","90°C"],a:1},
+{n:15,t:"Sn2 কয়টি ধাপে সম্পন্ন হয়?",o:["১","২","৩","৪"],a:0},
+{n:16,t:"উর্টজ বিক্রিয়ার মাধ্যমে কোন ধরনের অ্যালকেন উৎপন্ন হয়?",o:["উচ্চতর","সমমানের","কোনটিই নয়","নিম্নমানের"],a:0},
+{n:17,t:"হাকেল নিয়ম অনুযায়ী ফিউরান এর (4n+2)=?",o:["2","6","4","10"],a:1},
+{n:18,t:"বেনজিনের ষড়ভু জ কাঠামোর প্রবক্তা কে",o:["অগাস্টা কেকু ল","লিনাস পলিং","বার্জেলিয়াস","ফ্রেডরিক উহলার"],a:0},
+{n:19,t:"কোনটি ক্যানিজারো বিক্রিয়া প্রদর্শনে অক্ষম?",o:["HCHO","C2H2CHO","C6H5CHO","(CH3)3C-CHO"],a:1},
+{n:21,t:"দ্বিবন্ধন ও ত্রিবন্ধন যুক্ত কার্যকরী মূলক যুক্ত যৌগে নিচের কোন বিক্রিয়া ঘটে",o:["সংযোজন","প্রতিস্থাপন","অপসারণ","পলিমারকরণ"],a:0},
+{n:22,t:"কোনটি ফরমিক এসিড শনাক্তকারী পরীক্ষা নয়?",o:["লিটমাস পরীক্ষা","ফেহলিং পরীক্ষা","NaHCO3 দ্রবণ পরীক্ষা","KCN পরীক্ষা"],a:3},
+{n:23,t:"টলেন বিকারক পরীক্ষায় কোনটি ঘটে?",o:["হলুদ অধঃক্ষেপ পড়ে","সিলভার দর্পণ সৃষ্টি হয়","কমলা-লাল অধঃক্ষেপ পড়ে","লালচে অধঃক্ষেপ"],a:1},
+{n:24,t:"লাল পিঁপড়ার গ্ল্যান্ডে নিচের কোনটি থাকে?",o:["বিউটানোয়িক এসিড","হেক্সাডেকানোয়িক এসিড","মিথানয়িক এসিড","স্টিয়ারিক এসিড"],a:2},
+{n:25,t:"রেকটিফাইড স্পিরিট হলো -",o:["96.5% মিথানল + 3.5% পানি","95.6% মিথানল + 4.4% পানি","95.6% ইথানল + 4.4% পানি","96.5% ইথানল + 3.5% পানি"],a:2},
+{n:26,t:"অ্যালকোহল ও ইথারের মধ্যে পার্থক্য করার জন্য কোনটি ব্যবহৃত হয়?",o:["লুকাস বিকারক","PCl5","বিয়ার দ্রাবক","Zn.Hg"],a:1},
+{n:27,t:"অ্যালকোহলের শনাক্তকরণ বিক্রিয়া নয় কোনটি?",o:["হ্যালোফরম","PCl3 সহ পরীক্ষা","ধাতব Na সহ পরীক্ষা","PCl5 সহ পরীক্ষা"],a:1},
+{n:28,t:"ন্যাফথালিনে π ইলেকট্রন সংখ্যা কয়টি?",o:["14","10","2","6"],a:1},
+{n:29,t:"অসম্পৃক্ততা শনাক্তকারী পরীক্ষা কোনটি",o:["র‍্যাসিগ","বেয়ার","টলেন বিকারক","উলফ কিশনার"],a:1},
+{n:30,t:"গ্লুকোজ এর স্টেরিও সমানু কতটি",o:["4","8","16","12"],a:2},
+{n:31,t:"নিচের কোনটি হেটারো অ্যালিসাইক্লিক?",o:["ফিউরান","থায়োফিন","ইথিলিন অক্সাইড","পিরিডিন"],a:2},
+{n:32,t:"ইথেনে C-C বন্ধন দূরত্ব কত nm?",o:["0.154","0.134","0.139","0.143"],a:0},
+{n:33,t:"কোনটি অ্যালিফেটিক ও অ্যারোমেটিক উভয়ধর্মপ্রদর্শন করে?",o:["বেনজিন","টলুইন","নাইট্রোবেনজিন","নাইট্রোটলুইন"],a:1},
+{n:34,t:"কোনটি মেটা নির্দেশক?",o:["Br","NH2","-NO2","NHCOCH3"],a:2},
+{n:35,t:"গ্যামাক্সিন কোনটির বানিজ্যিক নাম?",o:["বেনজিন","সইক্লোহেক্সেন","বেনজিন হেক্সাক্লোরাইড","বেনজোফেনোন"],a:2},
+{n:36,t:"এক্রোলিন টেস্ট করা হয় কোনটি শনাক্তকরণে?",o:["ফেনল","গ্লিসারিন","নাইট্রোগ্লিসারিন","TNT"],a:1},
+{n:37,t:"কোব বিক্রিয়ায় কি উৎপন্ন হয়?",o:["স্যালিসাইলিক এসিড","অ্যাসপিরিন","স্যালিস্যাইলডিহাইড","অ্যাজোবেনজিন"],a:0},
+{n:38,t:"নিচের কোনটি ডায়াজোনিয়াম লবণ তৈরি করে?",o:["H2NC2H5","C6H5NO2","C6H5NH2","(CH3)3N"],a:2},
+{n:39,t:"জৈব যৌগে ফেনলিক হাইড্রক্সিল মূলক শনাক্ত করার জন্যে কোন পরীক্ষা করা হয়?",o:["লিবারম্যান পরীক্ষা","লুকাস বিকারকসহ পরীক্ষা","রাইমার টাইম্যান পরীক্ষা","উইলিয়ামস বিক্রিয়া"],a:0},
+{n:40,t:"স্পেন্ট লাই এর মধ্যে কত পার্সেন্ট গ্লিসারিন থাকে",o:["২-৫","৩-৫","৫-৮","৪-৯"],a:1},
+{n:42,t:"পাকা আনারসে কোনটি পাওয়া যায়",o:["বিউটানয়িক এসিড","বিউটাইল বিউটারেট","বেনজাইল এসিটেট","বিউটারেট এসিটেট"],a:1},
+{n:46,t:"কোন যৌগটি কার্বিল অ্যামিন পরীক্ষা দ্বারা সনাক্ত করা যায়?",o:["অ্যামাইড","1°অ্যামিন","2° অ্যামিন","3° অ্যামিন"],a:1}
+];
+let idx=0, answers=Array(questions.length).fill(null), finished=false, seconds=900, timerId=null, reviewShown=false;
+const $=id=>document.getElementById(id);
+function renderNav(){const box=$("numbers");box.innerHTML="";questions.forEach((q,i)=>{let b=document.createElement("button");b.className="num"+(answers[i]!==null?" answered":"")+(i===idx?" current":"");b.textContent=i+1;b.title=`Question ${i+1} (PDF Q${q.n})`;b.onclick=()=>{if(!finished){idx=i;render()}};box.appendChild(b)});$("answeredCount").textContent=`Answered: ${answers.filter(a=>a!==null).length} / ${questions.length}`}
+function render(){const q=questions[idx];$("qcount").textContent=`Question ${idx+1} of ${questions.length}`;$("sourceRef").textContent=`Original PDF reference: Q${q.n}`;$("question").textContent=q.t;$("options").innerHTML="";q.o.forEach((o,j)=>{let label=document.createElement("label");label.className="option"+(answers[idx]===j?" chosen":"");let radio=document.createElement("input");radio.type="radio";radio.name="answer";radio.checked=answers[idx]===j;radio.disabled=finished;radio.onchange=()=>{if(!finished){answers[idx]=j;render()}};let span=document.createElement("span");span.textContent=o;label.append(radio,span);$("options").appendChild(label)});$("prev").disabled=idx===0||finished;$("next").disabled=idx===questions.length-1||finished;$("progress").style.width=`${(idx+1)/questions.length*100}%`;renderNav()}
+function fmt(s){return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}
+function tick(){$("timer").textContent=fmt(seconds);if(seconds<=60)$("timer").style.background="#fee2e2";if(seconds<=0){submitExam(true);return}seconds--}
+function startTimer(){tick();timerId=setInterval(tick,1000)}
+function submitExam(auto=false){if(finished)return;if(!auto&&!confirm("আপনি কি নিশ্চিতভাবে exam submit করতে চান? Submit করার পর answer পরিবর্তন করা যাবে না।"))return;finished=true;clearInterval(timerId);let correct=0,wrong=0,unanswered=0;answers.forEach((a,i)=>{if(a===null)unanswered++;else if(a===questions[i].a)correct++;else wrong++});let positive=correct,negative=wrong*.25,score=positive-negative,pct=score/40*100;
+$("exam").classList.add("hidden");$("result").classList.remove("hidden");$("resultMessage").textContent=auto?"সময় শেষ হয়েছে—exam স্বয়ংক্রিয়ভাবে submit করা হয়েছে।":"Exam সফলভাবে submit হয়েছে।";
+const stats=[["Total Questions","40"],["Correct",correct],["Wrong",wrong],["Unanswered",unanswered],["Positive Marks",positive.toFixed(2)],["Negative Marks",`−${negative.toFixed(2)}`],["Final Score",score.toFixed(2)+" / 40"],["Percentage",pct.toFixed(2)+"%"]];
+$("stats").innerHTML=stats.map(([k,v])=>`<div class="stat"><small>${k}</small><strong>${v}</strong></div>`).join("");buildReview()}
+function buildReview(){const box=$("review");box.innerHTML="";questions.forEach((q,i)=>{const a=answers[i],correct=a===q.a,unanswered=a===null;const d=document.createElement("div");d.className="review-item "+(unanswered?"unanswered":correct?"correct":"wrong");const h=document.createElement("div");h.className="tag "+(unanswered?"muted":correct?"ok":"bad");h.textContent=`Question ${i+1} · PDF Q${q.n} · ${unanswered?"Unanswered":correct?"Correct":"Wrong"} · ${unanswered?"0":correct?"+1":"−0.25"} mark`;d.appendChild(h);const p=document.createElement("p");p.style.fontWeight="700";p.textContent=q.t;d.appendChild(p);q.o.forEach((o,j)=>{const line=document.createElement("p");let prefix=j===q.a?"✓ Correct answer: ":j===a?"✗ Your answer: ":"";line.textContent=prefix+o;if(j===q.a)line.className="ok";else if(j===a)line.className="bad";d.appendChild(line)});box.appendChild(d)})}
+$("prev").onclick=()=>{if(idx>0){idx--;render()}};$("next").onclick=()=>{if(idx<questions.length-1){idx++;render()}};$("submit").onclick=()=>submitExam(false);$("toggleReview").onclick=()=>{reviewShown=!reviewShown;$("review").classList.toggle("hidden",!reviewShown);$("toggleReview").textContent=reviewShown?"Answer Review লুকান":"Answer Review দেখুন"};render();startTimer();
+</script>
+</body>
+</html>
